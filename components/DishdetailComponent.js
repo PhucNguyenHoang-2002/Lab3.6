@@ -21,6 +21,7 @@ class RenderDish extends Component {
       if (dx < -200) return 1; // right to left
       return 0;
     };
+    
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gestureState) => { return true; },
       onPanResponderEnd: (e, gestureState) => {
@@ -33,11 +34,13 @@ class RenderDish extends Component {
               { text: 'OK', onPress: () => { this.props.favorite ? alert('Already favorite') : this.props.onPressFavorite() } },
             ]
           );
-        }
+        } 
+
+
         return true;
       }
     });
-
+    
     const dish = this.props.dish;
     if (dish != null) {
       return (
@@ -210,8 +213,22 @@ class Dishdetail extends Component {
       (cmt) => cmt.dishId === dishId
     );
     const favorite = this.props.favorites.some((el) => el === dishId);
+     // gesture
+     const detectComment = ({ moveX, moveY, dx, dy }) => {
+      if (dx > 200) return 1; //left to right
+      return 0;
+    };
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (e, gestureState) => { return true; },
+      onPanResponderEnd: (e, gestureState) => {
+        if (detectComment(gestureState) === 1) {
+            this.setState({ showModal: true });
+        }
+        return true;
+      }
+    });
     return (
-      <ScrollView>
+      <ScrollView {...panResponder.panHandlers}>
         <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
           <RenderDish
             dish={dish}
