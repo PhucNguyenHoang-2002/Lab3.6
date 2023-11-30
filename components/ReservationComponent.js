@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, Text, Switch, Button, Modal } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Switch, Button, Modal, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
-
+import * as Animatable from 'react-native-animatable';
 class ModalContent extends Component {
   render() {
     return (
@@ -13,7 +13,7 @@ class ModalContent extends Component {
         <Text style={styles.modalText}>Number of Guests: {this.props.guests}</Text>
         <Text style={styles.modalText}>Smoking?: {this.props.smoking ? 'Yes' : 'No'}</Text>
         <Text style={styles.modalText}>Date and Time: {format(this.props.date, 'dd/MM/yyyy - HH:mm')}</Text>
-        <Button title='Close' color='#00FFFF' onPress={() => this.props.onPressClose()} />
+        <Button title='Close' color='#7cc' onPress={() => this.props.onPressClose()} />
       </View>
     );
   }
@@ -33,6 +33,7 @@ class Reservation extends Component {
   render() {
     return (
       <ScrollView>
+        <Animatable.View animation="zoomIn" duration={2000} delay={1000}>
         <View style={styles.formRow}>
           <Text style={styles.formLabel}>Number of Guests</Text>
           <Picker style={styles.formItem} selectedValue={this.state.guests} onValueChange={(value) => this.setState({ guests: value })}>
@@ -57,18 +58,43 @@ class Reservation extends Component {
             onCancel={() => this.setState({ showDatePicker: false })} />
         </View>
         <View style={styles.formRow}>
-          <Button title='Reserve' color='#00FFFF' onPress={() => this.handleReservation()} />
+          <Button title='Reserve' color='#7cc' onPress={() => {this.handleReservation()}}/>
         </View>
-        <Modal animationType={'slide'} visible={this.state.showModal}
-          onRequestClose={() => this.setState({ showModal: false })}>
-          <ModalContent guests={this.state.guests} smoking={this.state.smoking} date={this.state.date}
-            onPressClose={() => this.setState({ showModal: false })} />
-        </Modal>
+        </Animatable.View>
       </ScrollView>
     );
   }
   handleReservation() {
-    this.setState({ showModal: true });
+    //alert(JSON.stringify(this.state));
+    // this.setState({ showModal: true })
+    const reservationInfo = `
+    Number of Guests: ${this.state.guests}
+    Smoking: ${this.state.smoking ? 'Yes' : 'No'}
+    Date and Time: ${format(this.state.date, 'dd/MM/yyyy - HH:mm')}
+  `;
+  Alert.alert(
+    'Your Reservation OK ?',
+    `${reservationInfo}`,
+    [
+      {
+        text: 'Cancel',
+        onPress: () => {this.resetForm()},
+      },
+      {
+        text: 'OK',
+        onPress: () => {this.resetForm()},
+      },
+    ],
+  );
+
+  }
+  resetForm() {
+    this.setState({
+      guests: 1,
+      smoking: false,
+      date: new Date(),
+      showDatePicker: false,
+    });
   }
 }
 export default Reservation;
@@ -78,6 +104,6 @@ const styles = StyleSheet.create({
   formLabel: { fontSize: 18, flex: 2 },
   formItem: { flex: 1 },
   modal: { justifyContent: 'center', margin: 20 },
-  modalTitle: { fontSize: 24, fontWeight: 'bold', backgroundColor: '#DC143C', textAlign: 'center', color: 'white', marginBottom: 20 },
+  modalTitle: { fontSize: 24, fontWeight: 'bold', backgroundColor: '#7cc', textAlign: 'center', color: 'white', marginBottom: 20 },
   modalText: { fontSize: 18, margin: 10 }
 });
