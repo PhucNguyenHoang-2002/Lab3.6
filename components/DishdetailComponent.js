@@ -16,9 +16,9 @@ import * as Animatable from 'react-native-animatable';
 
 class RenderDish extends Component {
   render() {
-    // gesture
     const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
       if (dx < -200) return 1; // right to left
+      else if (dx > 200) return 2; // left to right
       return 0;
     };
     const panResponder = PanResponder.create({
@@ -33,6 +33,8 @@ class RenderDish extends Component {
               { text: 'OK', onPress: () => { this.props.favorite ? alert('Already favorite') : this.props.onPressFavorite() } },
             ]
           );
+        } else if (recognizeDrag(gestureState) === 2) {
+          this.props.onPressComment();
         }
         return true;
       }
