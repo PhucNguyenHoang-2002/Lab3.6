@@ -29,8 +29,8 @@ class Login extends Component {
           title='Remember Me' center
           checked={this.state.remember}
           onPress={() => this.setState({ remember: !this.state.remember })} />
-        <View style={{ marginTop: 20 }}>
-          <Button title='Login' color='#7cc' onPress={() => this.handleLogin()} />
+        <View style={{ marginTop: 20, backgroundColor:'#9ACD32' }}>
+          <Button title='Login' color='white'  onPress={() => this.handleLogin()} />
         </View>
       </View>
     );
