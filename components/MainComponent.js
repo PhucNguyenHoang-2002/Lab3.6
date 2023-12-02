@@ -18,7 +18,7 @@ function LoginNavigatorScreen() {
   return (
     <LoginNavigator.Navigator initialRouteName='Login'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -36,7 +36,7 @@ function FavoritesNavigatorScreen() {
   return (
     <FavoritesNavigator.Navigator initialRouteName='Favorites'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -60,7 +60,7 @@ function HomeNavigatorScreen() {
     <HomeNavigator.Navigator
       initialRouteName='Home'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -79,7 +79,7 @@ function MenuNavigatorScreen() {
     <MenuNavigator.Navigator
       initialRouteName='Menu'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -100,7 +100,7 @@ function ContactNavigatorScreen() {
     <ContactNavigator.Navigator
       initialRouteName='Contact'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -119,7 +119,7 @@ function AboutNavigatorScreen() {
     <AboutNavigator.Navigator
       initialRouteName='About'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -138,7 +138,7 @@ function ReservationNavigatorScreen() {
   return (
     <ReservationNavigator.Navigator initialRouteName='Reservation'
       screenOptions={{
-        headerStyle: { backgroundColor: '#7cc' },
+        headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
@@ -155,7 +155,7 @@ import { baseUrl } from '../shared/baseUrl';
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      <View style={{ backgroundColor: '#7cc', height: 80, alignItems: 'center', flexDirection: 'row' }}>
+      <View style={{ backgroundColor: '#00CED1', height: 80, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
           <Image source={{ uri: baseUrl + 'images/logo.png' }} style={{ margin: 10, width: 80, height: 60 }} />
         </View>
@@ -175,42 +175,42 @@ function MainNavigatorScreen() {
       <MainNavigator.Screen name='LoginScreen' component={LoginNavigatorScreen}
         options={{
           title: 'Login', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
       <MainNavigator.Screen name='HomeScreen' component={HomeNavigatorScreen}
         options={{
           title: 'Home', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='home' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='home' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
       <MainNavigator.Screen name='MenuScreen' component={MenuNavigatorScreen}
         options={{
           title: 'Menu', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='menu' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='menu' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
       <MainNavigator.Screen name='ReservationScreen' component={ReservationNavigatorScreen}
         options={{
           title: 'Reserve Table', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='cutlery' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='cutlery' type='font-awesome' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
       <MainNavigator.Screen name='FavoritesScreen' component={FavoritesNavigatorScreen}
         options={{
           title: 'My Favorites', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='heart' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='heart' type='font-awesome' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
       <MainNavigator.Screen name='AboutScreen' component={AboutNavigatorScreen}
         options={{
           title: 'About Us', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='info' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='info' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
       <MainNavigator.Screen name='ContactScreen' component={ContactNavigatorScreen}
         options={{
           title: 'Contact Us', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='contacts' size={size} color={focused ? '#7cc' : '#ccc'} />)
+          drawerIcon: ({ focused, size }) => (<Icon name='contacts' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
 
 
