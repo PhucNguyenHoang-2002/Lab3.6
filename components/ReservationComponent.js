@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, Text, Switch, Button, Modal, Alert  } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Switch, Button, Modal, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
 import * as Animatable from 'react-native-animatable';
+import * as Notifications from 'expo-notifications';
 
 
 class ModalContent extends Component {
@@ -72,15 +73,36 @@ class Reservation extends Component {
     );
   }
   handleReservation() {
-    // this.setState({ showModal: true });
     Alert.alert(
       'Your Reservation OK?',
       'Number of Guestes: ' + this.state.guests + '\nSmoking? ' + this.state.smoking + '\nDate and Time: ' + this.state.date.toISOString(),
       [
         { text: 'Cancel', onPress: () => this.resetForm() },
-        { text: 'OK', onPress: () => this.resetForm() },
+        {
+          text: 'OK', onPress: () => {
+            this.presentLocalNotification(this.state.date);
+            this.resetForm();
+          }
+        },
       ]
     );
+  }
+  async presentLocalNotification(date) {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status === 'granted') {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({ shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: true })
+      });
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Your Reservation',
+          body: 'Reservation for ' + date + ' requested',
+          sound: true,
+          vibrate: true
+        },
+        trigger: null
+      });
+    }
   }
   resetForm() {
     this.setState({
@@ -90,7 +112,7 @@ class Reservation extends Component {
       showDatePicker: false
     });
   }
-}   
+}
 export default Reservation;
 
 const styles = StyleSheet.create({
