@@ -4,6 +4,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, Linking } from 'react-native';
 import { Icon, Image } from 'react-native-elements';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import About from './AboutComponent';
 import Contact from './ContactComponent';
@@ -12,17 +13,36 @@ import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Favorites from './FavoriteComponent';
 import Login from './LoginComponent';
+import Register from './RegisterComponent';
+
+function TabNavigatorScreen() {
+  const TabNavigator = createBottomTabNavigator();
+  return (
+    <TabNavigator.Navigator initialRouteName='Login'>
+      <TabNavigator.Screen name='Login' component={Login}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={color} />)
+        }} />
+      <TabNavigator.Screen name='Register' component={Register}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (<Icon name='user-plus' type='font-awesome' size={size} color={color} />)
+        }} />
+    </TabNavigator.Navigator>
+  );
+}
 
 function LoginNavigatorScreen() {
   const LoginNavigator = createStackNavigator();
   return (
-    <LoginNavigator.Navigator initialRouteName='Login'
+    <LoginNavigator.Navigator initialRouteName='LoginRegister'
       screenOptions={{
         headerStyle: { backgroundColor: '#00CED1' },
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
-      <LoginNavigator.Screen name='Login' component={Login}
+      <LoginNavigator.Screen name='LoginRegister' component={TabNavigatorScreen}
         options={({ navigation }) => ({
           headerTitle: 'Login',
           headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
@@ -172,16 +192,19 @@ function MainNavigatorScreen() {
   const MainNavigator = createDrawerNavigator();
   return (
     <MainNavigator.Navigator initialRouteName='HomeScreen' drawerContent={(props) => <CustomDrawerContent {...props} />}>
-      <MainNavigator.Screen name='LoginScreen' component={LoginNavigatorScreen}
-        options={{
-          title: 'Login', headerShown: false,
-          drawerIcon: ({ focused, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={focused ? '#00CED1' : '#ccc'} />)
-        }} />
+
       <MainNavigator.Screen name='HomeScreen' component={HomeNavigatorScreen}
         options={{
           title: 'Home', headerShown: false,
           drawerIcon: ({ focused, size }) => (<Icon name='home' size={size} color={focused ? '#00CED1' : '#ccc'} />)
         }} />
+
+      <MainNavigator.Screen name='LoginScreen' component={LoginNavigatorScreen}
+        options={{
+          title: 'Login', headerShown: false,
+          drawerIcon: ({ focused, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={focused ? '#00CED1' : '#ccc'} />)
+        }} />
+
 
       <MainNavigator.Screen name='MenuScreen' component={MenuNavigatorScreen}
         options={{
