@@ -11,6 +11,25 @@ import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent';
+
+function LoginNavigatorScreen() {
+  const LoginNavigator = createStackNavigator();
+  return (
+    <LoginNavigator.Navigator initialRouteName='Login'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#7cc' },
+        headerTintColor: '#fff',
+        headerTitleStyle: { color: '#fff' }
+      }}>
+      <LoginNavigator.Screen name='Login' component={Login}
+        options={({ navigation }) => ({
+          headerTitle: 'Login',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })} />
+    </LoginNavigator.Navigator>
+  );
+}
 
 function FavoritesNavigatorScreen() {
   const FavoritesNavigator = createStackNavigator();
@@ -153,6 +172,11 @@ function MainNavigatorScreen() {
   const MainNavigator = createDrawerNavigator();
   return (
     <MainNavigator.Navigator initialRouteName='HomeScreen' drawerContent={(props) => <CustomDrawerContent {...props} />}>
+      <MainNavigator.Screen name='LoginScreen' component={LoginNavigatorScreen}
+        options={{
+          title: 'Login', headerShown: false,
+          drawerIcon: ({ focused, size }) => (<Icon name='sign-in' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
+        }} />
       <MainNavigator.Screen name='HomeScreen' component={HomeNavigatorScreen}
         options={{
           title: 'Home', headerShown: false,
@@ -171,7 +195,7 @@ function MainNavigatorScreen() {
           drawerIcon: ({ focused, size }) => (<Icon name='cutlery' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
         }} />
 
-<MainNavigator.Screen name='FavoritesScreen' component={FavoritesNavigatorScreen}
+      <MainNavigator.Screen name='FavoritesScreen' component={FavoritesNavigatorScreen}
         options={{
           title: 'My Favorites', headerShown: false,
           drawerIcon: ({ focused, size }) => (<Icon name='heart' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
@@ -189,8 +213,8 @@ function MainNavigatorScreen() {
           drawerIcon: ({ focused, size }) => (<Icon name='contacts' size={size} color={focused ? '#7cc' : '#ccc'} />)
         }} />
 
-     
-        
+
+
     </MainNavigator.Navigator>
   );
 }
