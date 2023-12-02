@@ -60,8 +60,8 @@ class Reservation extends Component {
               onConfirm={(date) => this.setState({ date: date, showDatePicker: false })}
               onCancel={() => this.setState({ showDatePicker: false })} />
           </View>
-          <View style={styles.formRow}>
-            <Button title='Reserve' color='#00FFFF' onPress={() => this.handleReservation()} />
+          <View style={{styles:'formRow', backgroundColor:'#9ACD32'}}>
+            <Button title='Reserve' color='white' onPress={() => this.handleReservation()} />
           </View>
           <Modal animationType={'slide'} visible={this.state.showModal}
             onRequestClose={() => this.setState({ showModal: false })}>
