@@ -1,28 +1,36 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, Text, Switch, Button, Modal, Alert } from 'react-native';
+import { Alert,StyleSheet, View, ScrollView, Text, Switch, Button,Modal } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
-import * as Animatable from 'react-native-animatable';
+import * as Animatable from "react-native-animatable";
 import * as Notifications from 'expo-notifications';
+import * as Calendar from 'expo-calendar';
 
 
-class ModalContent extends Component {
-  render() {
-    return (
-      <View style={styles.modal}>
-        <Text style={styles.modalTitle}>Your Reservation</Text>
-        <Text style={styles.modalText}>Number of Guests: {this.props.guests}</Text>
-        <Text style={styles.modalText}>Smoking?: {this.props.smoking ? 'Yes' : 'No'}</Text>
-        <Text style={styles.modalText}>Date and Time: {format(this.props.date, 'dd/MM/yyyy - HH:mm')}</Text>
-        <Button title='Close' color='#00FFFF' onPress={() => this.props.onPressClose()} />
-      </View>
-    );
-  }
-}
+
+// class ModalContent extends Component {
+//   render() {
+//     return (
+//       <View style={styles.modal}>
+//         <Text style={styles.modalTitle}>Your Reservation</Text>
+//         <Text style={styles.modalText}>Number of Guests: {this.props.guests}</Text>
+//         <Text style={styles.modalText}>Smoking?: {this.props.smoking ? 'Yes' : 'No'}</Text>
+//         <Text style={styles.modalText}>Date and Time: {format(this.props.date, 'dd/MM/yyyy - HH:mm')}</Text>
+//         <Button title='Close' color='#7cc' onPress={() => this.props.onPressClose()} />
+//       </View>
+//     );
+//   }
+// }
 
 class Reservation extends Component {
+  initialState = {
+    guests: 1,
+    smoking: false,
+    date: new Date(),
+  }
+  state = this.initialState
   constructor(props) {
     super(props);
     this.state = {
@@ -30,13 +38,13 @@ class Reservation extends Component {
       smoking: false,
       date: new Date(),
       showDatePicker: false,
-      showModal: false
+      // showModal: false
     }
   }
   render() {
     return (
       <ScrollView>
-        <Animatable.View animation='zoomIn' duration={2000} delay={1000}>
+       <Animatable.View animation="zoomIn" duration={2000}>
           <View style={styles.formRow}>
             <Text style={styles.formLabel}>Number of Guests</Text>
             <Picker style={styles.formItem} selectedValue={this.state.guests} onValueChange={(value) => this.setState({ guests: value })}>
@@ -60,32 +68,70 @@ class Reservation extends Component {
               onConfirm={(date) => this.setState({ date: date, showDatePicker: false })}
               onCancel={() => this.setState({ showDatePicker: false })} />
           </View>
-          <View style={{styles:'formRow', backgroundColor:'#9ACD32'}}>
-            <Button title='Reserve' color='white' onPress={() => this.handleReservation()} />
+          <View style={styles.formRow}>
+            <Button title='Reserve' color='#7cc' onPress={() => this.handleReservation()} />
           </View>
-          <Modal animationType={'slide'} visible={this.state.showModal}
-            onRequestClose={() => this.setState({ showModal: false })}>
-            <ModalContent guests={this.state.guests} smoking={this.state.smoking} date={this.state.date}
-              onPressClose={() => this.setState({ showModal: false })} />
-          </Modal>
         </Animatable.View>
+        {/* <Modal animationType={'slide'} visible={this.state.showModal}
+          onRequestClose={() => this.setState({ showModal: false })}>
+          <ModalContent guests={this.state.guests} smoking={this.state.smoking} date={this.state.date}
+            onPressClose={() => this.setState({ showModal: false })} />
+        </Modal> */}
       </ScrollView>
     );
   }
+  static defaultState() {
+    return {
+      guests: 1,
+      smoking: false,
+      date: "",
+    };
+  }
+  resetForm() {
+    // this.setState(Reservation.Component());
+    // this.props.onPressClose();
+    this.setState(() => this.initialState)
+  }
   handleReservation() {
+    const { date, guests, smoking } = this.state;
     Alert.alert(
-      'Your Reservation OK?',
-      'Number of Guestes: ' + this.state.guests + '\nSmoking? ' + this.state.smoking + '\nDate and Time: ' + this.state.date.toISOString(),
+      "Your Reservation OK?",
+      `Number of guests: ${guests}\nSmoking? ${
+        smoking ? "True" : "False"
+      }\nDate and Time:${date}`,
       [
         { text: 'Cancel', onPress: () => this.resetForm() },
-        {
-          text: 'OK', onPress: () => {
-            this.presentLocalNotification(this.state.date);
-            this.resetForm();
-          }
-        },
-      ]
+        { text: 'OK', onPress: () => {   
+          this.addReservationToCalendar(this.state.date);
+          this.presentLocalNotification(this.state.date);
+          this.resetForm() }},
+      ],
     );
+    //this.setState({showModal:true})
+  }
+  async addReservationToCalendar(date) {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status === 'granted') {
+      const defaultCalendarSource = { isLocalAccount: true, name: 'Expo Calendar' };
+      const newCalendarID = await Calendar.createCalendarAsync({
+        title: 'Expo Calendar',
+        color: 'blue',
+        entityType: Calendar.EntityTypes.EVENT,
+        sourceId: defaultCalendarSource.id,
+        source: defaultCalendarSource,
+        name: 'internalCalendarName',
+        ownerAccount: 'personal',
+        accessLevel: Calendar.CalendarAccessLevel.OWNER,
+      });
+      const eventId = await Calendar.createEventAsync(newCalendarID, {
+        title: 'Confusion Table Reservation',
+        startDate: date,
+        endDate: new Date(date.getTime() + 2 * 60 * 60 * 1000),
+        timeZone: 'Asia/Hong_Kong',
+        location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+      });
+      alert('Your new event ID is: ' + eventId);
+    }
   }
   async presentLocalNotification(date) {
     const { status } = await Notifications.requestPermissionsAsync();
@@ -119,7 +165,7 @@ const styles = StyleSheet.create({
   formRow: { alignItems: 'center', justifyContent: 'center', flex: 1, flexDirection: 'row', margin: 20 },
   formLabel: { fontSize: 18, flex: 2 },
   formItem: { flex: 1 },
-  modal: { justifyContent: 'center', margin: 20 },
-  modalTitle: { fontSize: 24, fontWeight: 'bold', backgroundColor: '#DC143C', textAlign: 'center', color: 'white', marginBottom: 20 },
-  modalText: { fontSize: 18, margin: 10 }
+  // modal: { justifyContent: 'center', margin: 20 },
+  // modalTitle: { fontSize: 24, fontWeight: 'bold', backgroundColor: '#7cc', textAlign: 'center', color: 'white', marginBottom: 20 },
+  // modalText: { fontSize: 18, margin: 10 }
 });
